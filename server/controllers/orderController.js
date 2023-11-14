@@ -38,6 +38,27 @@ class OrderController {
             next(error);
         }
     };
+
+    static async deleteOrder(req, res, next) {
+        try {
+            const { id } = req.params;
+            const order = await Order.findByPk(id);
+
+            if (!order) {
+                throw { name: "notFound", message: `Order with id ${id} not found` }
+            };
+
+            await order.destroy({
+                where: { id }
+            });
+
+            res.status(200).json({
+                message: `Order with id ${id} successfuly deleted`
+            });
+        } catch (error) {
+            next(error);
+        }
+    };
 };
 
 module.exports = OrderController;
