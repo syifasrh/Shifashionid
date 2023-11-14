@@ -18,20 +18,6 @@ module.exports = (sequelize, DataTypes) => {
   Order.init({
     UserId: DataTypes.INTEGER,
     ItemId: DataTypes.INTEGER,
-    subdistrict: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "Subdistrict is required!"
-        },
-        notNull: {
-          args: true,
-          msg: "Subdistrict is required!"
-        }
-      }
-    },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -74,7 +60,20 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    quantity: DataTypes.INTEGER,
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "Quantity is required!"
+        },
+        notNull: {
+          args: true,
+          msg: "Quantity is required!"
+        }
+      }
+    },
     shippingFee: DataTypes.INTEGER,
     totalPayment: DataTypes.INTEGER,
     paymentStatus: DataTypes.STRING

@@ -27,9 +27,6 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade'
       },
-      subdistrict: {
-        type: Sequelize.STRING
-      },
       city: {
         type: Sequelize.STRING
       },
