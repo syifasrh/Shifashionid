@@ -3,44 +3,15 @@ import React from "react";
 export function Footer() {
   return (
     <>
-      <footer className="flex w-full flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 border-t border-blue-gray-50 py-6 text-center md:justify-between">
-        <p className="block font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased">
-          © 2023 Material Tailwind
-        </p>
-        <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
-          <li>
-            <a
-              href="#"
-              className="block font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased transition-colors hover:text-pink-500 focus:text-pink-500"
-            >
-              About Us
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased transition-colors hover:text-pink-500 focus:text-pink-500"
-            >
-              License
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased transition-colors hover:text-pink-500 focus:text-pink-500"
-            >
-              Contribute
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block font-sans text-base font-normal leading-relaxed text-blue-gray-900 antialiased transition-colors hover:text-pink-500 focus:text-pink-500"
-            >
-              Contact Us
-            </a>
-          </li>
-        </ul>
+      <footer className="mt-10 items-center justify-center border-t border-blue-gray-50 py-6 text-center md:justify-evenly">
+        <div className="items-center justify-center flex">
+          <img src="logo.png" alt="logo shifashionid" width={"150px"} />
+        </div>
+        <div className="flex font-sans items-center justify-center font-normal leading-relaxed text-blue-gray-900 antialiased opacity-60">
+          <p>
+            © 2023 Shifashion Official Inc. All rights reserved.
+          </p>
+        </div>
       </footer>
     </>
   );

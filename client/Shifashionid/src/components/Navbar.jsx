@@ -1,12 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa6";
 import { SlHandbag } from "react-icons/sl";
 
 export function StickyNavbar({ openCloseModal }) {
+  const pathname = useLocation()
+
   return (
     <>
-      <nav className="sticky inset-0 z-10 block h-max w-full max-w-full rounded-none border border-white/80 bg-white bg-opacity-80 py-2 px-4 text-white shadow-md backdrop-blur-2xl backdrop-saturate-200 lg:px-8 lg:py-4">
+      <nav className="sticky inset-0 z-10 block h-max w-full max-w-full rounded border border-white/80 bg-white bg-opacity-80 py-2 px-4 text-white backdrop-blur backdrop-saturate-200 lg:px-8 lg:py-4 shadow-lg shadow-blue-gray-900/50">
         <div className="flex items-center text-gray-900 md:container md:mx-auto">
           <Link
             to="/"
@@ -34,7 +36,7 @@ export function StickyNavbar({ openCloseModal }) {
             </li>
           </ul>
           <Link
-            to={'/formLogin'}
+            to={'/login'}
             className="shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
             type="button"
             data-ripple-light="true"
@@ -58,18 +60,6 @@ export function StickyNavbar({ openCloseModal }) {
           data-collapse="sticky-navar"
         ></div>
       </nav>
-      <div className="mx-auto max-w-screen py-10 md:container md:mx-auto">
-        <div className="relative mb-12 flex flex-col overflow-hidden rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-          <img
-            alt="nature"
-            className="h-[32rem] w-full object-cover object-center"
-            src="https://assets.hermes.com/is/image/hermesedito/BIRKIN_HERO?wid=1200"
-          />
-        </div>
-        <h2 className="mb-2 block font-sans text-4xl font-semibold leading-[1.3] tracking-normal text-blue-gray-900 antialiased text-center uppercase">
-          Choose your favorite bag
-        </h2>
-      </div>
     </>
   );
 }
