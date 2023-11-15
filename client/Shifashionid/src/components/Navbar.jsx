@@ -3,24 +3,22 @@ import { Link } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa6";
 import { SlHandbag } from "react-icons/sl";
 
-export function StickyNavbar() {
+export function StickyNavbar({ openCloseModal }) {
   return (
     <>
       <nav className="sticky inset-0 z-10 block h-max w-full max-w-full rounded-none border border-white/80 bg-white bg-opacity-80 py-2 px-4 text-white shadow-md backdrop-blur-2xl backdrop-saturate-200 lg:px-8 lg:py-4">
         <div className="flex items-center text-gray-900 md:container md:mx-auto">
           <Link
             to="/"
-            className="mr-4 block cursor-pointer py-1.5 font-sans text-base font-medium leading-relaxed text-inherit antialiased"
+            className="mr-4 block cursor-pointer font-sans text-base font-medium leading-relaxed text-inherit antialiased"
           >
-            Shifashionid
+            <img src="logo.png" alt="Shifashionid" width={"100px"}/>
           </Link>
-          <ul>
-            <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased">
-              <p className="flex items-center">
-                Welcome to Our Best Fashion 
+          <div className="flex flex-grow justify-center">
+              <p>
+                Welcome to Our Best Fashion
               </p>
-            </li>
-          </ul>
+          </div>
           <ul className="ml-auto mr-8 hidden items-center gap-6 lg:flex">
             <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased middle none center items-center justify-center rounded-lg uppercase text-pink-500 transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
               <Link to={'/'} className="opacity-60">
@@ -43,14 +41,17 @@ export function StickyNavbar() {
           >
             <FaRegUser />
           </Link>
-          <Link
-            to={'/'}
+          <a
+            href="" onClick={(event) => {
+                event.preventDefault()
+                openCloseModal()
+            }}
             className="ml-5 shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
             type="Button"
             data-ripple-light="true"
           >
             <SlHandbag />
-          </Link>
+          </a>
         </div>
         <div
           className="block h-0 w-full basis-full overflow-hidden text-blue-gray-900 transition-all duration-300 ease-in lg:hidden"
