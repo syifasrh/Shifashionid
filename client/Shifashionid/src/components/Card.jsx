@@ -3,7 +3,7 @@ import React from "react";
 export function Card({ item }) {
   return (
     <>
-        <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-96 rounded-xl bg-clip-border transition-all hover:scale-105">
+        <div className="relative flex flex-col text-gray-700 bg-white w-96 rounded-xl bg-clip-border transition-all hover:scale-105 shadow-lg shadow-blue-gray-900/50">
           <div className="relative mx-4 mt-4 overflow-hidden text-gray-700 bg-white h-96 rounded-xl bg-clip-border">
             <img src={item.imgUrl} className="object-cover w-full h-full" />
           </div>

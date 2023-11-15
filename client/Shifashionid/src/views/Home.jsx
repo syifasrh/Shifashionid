@@ -9,16 +9,16 @@ import { useNavigate } from "react-router";
 export function Home() {
   const [items, setItems] = useState([]);
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   function openCloseModal() {
     // if(localStorage.access_token) {
-        
-        if (open === true) {
-            setOpen(false)
-        } else {
-            setOpen(true)
-        }
+
+    if (open === true) {
+      setOpen(false);
+    } else {
+      setOpen(true);
+    }
     // } else {
     //     navigate('/login')
     // }
@@ -42,8 +42,21 @@ export function Home() {
     <>
       {/* navbar */}
       <StickyNavbar openCloseModal={openCloseModal} />
+      <div className="mx-auto max-w-screen py-10 md:container md:mx-auto">
+        <div className="relative mb-12 flex flex-col overflow-hidden rounded-xl bg-white bg-clip-border text-gray-700 shadow-xl shadow-blue-gray-900/50">
+          <img
+            alt="nature"
+            className="h-[32rem] w-full object-cover object-center"
+            src="https://assets.hermes.com/is/image/hermesedito/BIRKIN_HERO?wid=1200"
+          />
+        </div>
+        <h2 className="mb-2 block font-sans text-4xl font-semibold leading-[1.3] tracking-normal text-blue-gray-900 antialiased text-center uppercase">
+          Choose your favorite bag
+        </h2>
+      </div>
+
       {/* cart */}
-      <Example open={open} openCloseModal={openCloseModal}/>
+      <Example open={open} openCloseModal={openCloseModal} />
 
       <div className="md:container md:mx-auto">
         {/* card */}
@@ -52,12 +65,9 @@ export function Home() {
             return <Card item={item} />;
           })}
         </div>
-
-        <div className="md:container md:mx-auto py-30">
-          {/* footer */}
-          <Footer />
-        </div>
       </div>
+      {/* footer */}
+      <Footer />
     </>
   );
 }
