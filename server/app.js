@@ -7,6 +7,8 @@ const OrderController = require('./controllers/orderController');
 const ItemController = require('./controllers/itemController');
 const UserController = require('./controllers/userController');
 
+const PaymentController = require('./controllers/paymentController');
+
 const { authentication } = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 
@@ -30,6 +32,8 @@ app.use(authentication)
 app.post('/orders/:id', OrderController.addOrder)
 app.put('/orders/:id', OrderController.updateOrder)
 app.delete('/orders/:id', OrderController.deleteOrder)
+
+app.get('/payment/midtrans/token')
 
 app.use(errorHandler)
 
