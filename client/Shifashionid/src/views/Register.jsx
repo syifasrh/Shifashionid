@@ -4,6 +4,7 @@ import { Footer } from "../components/Footer";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export function Register() {
   const navigate = useNavigate();
@@ -21,12 +22,20 @@ export function Register() {
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:3000/add-user', inputForm);
+      const { data } = await axios.post('http://localhost:3000/add-user', inputForm);
 
-      console.log("<<<");
+      Swal.fire({
+        title: "Success!",
+        text: data.message,
+        icon: "success"
+      });
       navigate("/login");
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response.data.message
+      });
     }
   };
 
@@ -85,7 +94,7 @@ export function Register() {
             </div>
             <button
               className="mt-6 block w-full select-none rounded-lg bg-pink-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
+              type="submit"
               data-ripple-light="true"
             >
               Register

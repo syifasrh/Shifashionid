@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { StickyNavbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export function Login() {
   const navigate = useNavigate();
@@ -25,9 +26,18 @@ export function Login() {
       );
 
       localStorage.setItem("access_token", data.access_token);
+      Swal.fire({
+        title: "Welcom!",
+        text: "Enjoy your shopping!",
+        icon: "success"
+      });
       navigate("/");
     } catch (error) {
-        console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response.data.message
+      });
     }
   };
   
@@ -84,7 +94,7 @@ export function Login() {
                 </div>
                 <button
                   className="mt-6 block w-full select-none rounded-lg bg-pink-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  type="button"
+                  type="submit"
                   data-ripple-light="true"
                 >
                   Sign In
