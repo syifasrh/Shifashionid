@@ -161,13 +161,6 @@ class OrderController {
                 }
             })
 
-            // const { data } = await axios({
-            //     method: 'POST',
-            //     url: 'https://api.rajaongkir.com/starter/cost',
-            //     headers: { key: '2e2bdd315e5d005209ff5521ae40f472', 'content-type': 'application/x-www-form-urlencoded' },
-            //     data: { origin: 153, destination: req.body.destination, weight: req.body.weight, courier: 'jne' }
-            // });
-
             const result = data.rajaongkir.results[0].costs[1].cost[0] || 0;
 
             res.json(result);
