@@ -1,4 +1,5 @@
 const { Order } = require('../models');
+const axios = require('axios');
 
 class OrderController {
     static async addOrder(req, res, next) {
@@ -55,6 +56,70 @@ class OrderController {
             res.status(200).json({
                 message: `Order with id ${id} successfuly deleted`
             });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    static async getProvinces(req, res, next) {
+        try {
+            const { data } = await axios({
+                method: 'GET',
+                url: 'https://api.rajaongkir.com/starter/province',
+                headers: { key: 'f1ee34113fe0a2a851b4e5fa9475b70b' }
+            });
+
+            const result = data.rajaongkir.results.map(el => {
+                return {
+                    ProvinceId: el.province_id,
+                    province: el.province
+                }
+            });
+
+            res.json({ result });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    static async getCities(req, res, next) {
+        try {
+            const { data } = await axios({
+                method: 'GET',
+                url: 'https://api.rajaongkir.com/starter/city',
+                q: {province: req.body.province},
+                headers: { key: 'f1ee34113fe0a2a851b4e5fa9475b70b' }
+            });
+
+            const result = data.rajaongkir.results.map(el => {
+                return {
+                    CityId: el.city_id,
+                    ProvinceId: el.province_id,
+                    province: el.province,
+                    type: el.type,
+                    city: el.city_name,
+                    postalCode: el.postal_code
+                }
+            });
+
+            res.json({ result });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    static async getCost(req, res, next) {
+        try {
+            const { data } = await axios({
+                method: 'POST',
+                url: 'https://api.rajaongkir.com/starter/cost',
+                headers: { key: 'f1ee34113fe0a2a851b4e5fa9475b70b', 'content-type': 'application/x-www-form-urlencoded' },
+                data: { origin: 153, destination: req.body.destination, weight: req.body.weight, courier: 'jne' }
+            });
+
+            const result = data.rajaongkir.results[0].costs[1].cost[0];
+
+            res.json({ result });
         } catch (error) {
             next(error);
         }

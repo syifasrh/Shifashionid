@@ -33,6 +33,11 @@ app.post('/orders/:id', OrderController.addOrder)
 app.put('/orders/:id', OrderController.updateOrder)
 app.delete('/orders/:id', OrderController.deleteOrder)
 
+// shipping fee
+app.get('/provinces', OrderController.getProvinces)
+app.get('/cities', OrderController.getCities)
+app.post('/cost', OrderController.getCost)
+
 app.get('/payment/midtrans/token')
 
 app.use(errorHandler)

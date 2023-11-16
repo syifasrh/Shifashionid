@@ -3,11 +3,11 @@ const { Order } = require('../models');
 
 const authentication = async (req, res, next) => {
     try {
-        const { Authorization } = req.headers;
-        if (!Authorization) throw { name: "Unauthorized", message: "Please Login First" };
+        const { authorization } = req.headers;
+        if (!authorization) throw { name: "Unauthorized", message: "Please Login First" };
 
-        const token = Authorization.split(' ')[1];
-        if (Authorization.split(' ')[0] !== "Bearer") {
+        const token = authorization.split(' ')[1];
+        if (authorization.split(' ')[0] !== "Bearer") {
             throw { name: "Unauthorized", message: "Please Login First" }
         };
 
