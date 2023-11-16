@@ -14,7 +14,7 @@ export function StickyNavbar({ openCloseModal }) {
             to="/"
             className="mr-4 block cursor-pointer font-sans text-base font-medium leading-relaxed text-inherit antialiased"
           >
-            <img src="logo.png" alt="Shifashionid" width={"100px"}/>
+            <img src="/logo.png" alt="Shifashionid" width={"100px"}/>
           </Link>
           <div className="flex flex-grow justify-center">
               <p>
@@ -35,25 +35,26 @@ export function StickyNavbar({ openCloseModal }) {
               </Link>
             </li>
           </ul>
-          <Link
-            to={'/login'}
-            className="shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
-            type="button"
-            data-ripple-light="true"
-          >
-            <FaRegUser />
-          </Link>
           <a
             href="" onClick={(event) => {
                 event.preventDefault()
                 openCloseModal()
             }}
-            className="ml-5 shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+            className="shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
             type="Button"
             data-ripple-light="true"
           >
             <SlHandbag />
           </a>
+          <Link
+            to={'/login'}
+            className="ml-5 shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+            type="button"
+            data-ripple-light="true"
+          >
+            <FaRegUser />
+          </Link>
+          
         </div>
         <div
           className="block h-0 w-full basis-full overflow-hidden text-blue-gray-900 transition-all duration-300 ease-in lg:hidden"

@@ -27,7 +27,7 @@ export function Login() {
 
       localStorage.setItem("access_token", data.access_token);
       Swal.fire({
-        title: "Welcom!",
+        title: "Welcome!",
         text: "Enjoy your shopping!",
         icon: "success"
       });

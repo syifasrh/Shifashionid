@@ -4,10 +4,56 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { CartContext } from "../context";
 import { button } from "@material-tailwind/react";
+import Swal from "sweetalert2";
 
 export function Example({ open, openCloseModal }) {
   const [order, setOrder] = useState({});
   const { cart, setCart } = useContext(CartContext);
+  const [value, setValue] = useState([]);
+
+  useEffect(() => {
+    async function fetchItem() {
+      try {
+        const { data } = await axios.get("http://localhost:3000/items", {
+          headers: { Authorization: `Bearer ${localStorage.access_token}` },
+        });
+
+        setValue(data)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  });
+
+  async function deleteOrder(deletedId) {
+    try {
+      await axios.delete(`http://localhost:3000/orders/${deletedId}`, {
+        headers: { Authorization: `Bearer ${localStorage.access_token}` },
+      });
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to remove this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Removed!",
+            text: "Your file has been removed.",
+            icon: "success",
+          });
+        }
+      });
+
+      setValue(value.filter((el) => el.id !== deletedId));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -65,7 +111,7 @@ export function Example({ open, openCloseModal }) {
                             role="list"
                             className="-my-6 divide-y divide-gray-200"
                           >
-                            <li key={cart.id} className="flex py-6">
+                            <li className="flex py-6">
                               <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                 <img
                                   src={cart.imgUrl}
@@ -89,14 +135,17 @@ export function Example({ open, openCloseModal }) {
                                   <p className="text-gray-500">
                                     Qty {cart.quantity}
                                   </p>
-                                  <div className="flex" style={{ marginLeft: "120px"}}>
+                                  <div
+                                    className="flex"
+                                    style={{ marginLeft: "120px" }}
+                                  >
                                     <button
                                       onClick={() => {
                                         setCart({
                                           ...cart,
                                           quantity: cart.quantity
                                             ? cart.quantity + 1
-                                            : 1
+                                            : 1,
                                         });
                                       }}
                                       type="button"
@@ -107,7 +156,7 @@ export function Example({ open, openCloseModal }) {
                                   </div>
                                   <div className="flex">
                                     <button
-                                      type="button"
+                                      onClick={() => deleteOrder(value.id)}
                                       className="font-medium text-pink-600 hover:text-pink-500"
                                     >
                                       Remove
@@ -124,7 +173,9 @@ export function Example({ open, openCloseModal }) {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>{(cart.quantity * cart.price ).toLocaleString("id-ID")}</p>
+                        <p>
+                          {(cart.quantity * cart.price).toLocaleString("id-ID")}
+                        </p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.
@@ -144,7 +195,7 @@ export function Example({ open, openCloseModal }) {
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                             onClick={openCloseModal}
-                            style={{ marginLeft: "5px"}}
+                            style={{ marginLeft: "5px" }}
                           >
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>
