@@ -1,12 +1,32 @@
 const { User } = require('../models');
 const { comparePass } = require('../helpers/bcrypt');
 const { createToken, verifyToken } = require('../helpers/jwt');
-const {OAuth2Client, JWT} = require('google-auth-library');
+const { OAuth2Client, JWT } = require('google-auth-library');
+const { createTransport } = require('nodemailer');
 
 class UserController {
     static async register(req, res, next) {
         try {
+            //transporter
+            const transporter = createTransport({
+                host: "smtp-relay.brevo.com",
+                port: 587,
+                auth: {
+                    user: process.env.DEV_EMAIL,
+                    pass: process.env.DEV_PASS,
+                },
+            });
+
             const user = await User.create(req.body);
+
+            //send email
+            await transporter.sendMail({
+                from: 'shifashionid@fashion.id',
+                to: req.body.email,
+                subject: `Welcome and happy shopping to our best fashion`,
+                html: 'Welcome my best customers'
+            })
+
             res
                 .status(201)
                 .json({ message: `${user.username} with email ${user.email} has been created` });

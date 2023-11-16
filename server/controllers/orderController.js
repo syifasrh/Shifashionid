@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+const midtransClient = require('midtrans-client');
 const { Order } = require('../models');
 const axios = require('axios');
 
@@ -7,8 +10,34 @@ class OrderController {
             const { ItemId, city, province, address, quantity, shippingFee, totalPayment, paymentStatus } = req.body;
             const UserId = req.user.id;
             const order = await Order.create({ ItemId, city, province, address, quantity, shippingFee, totalPayment, paymentStatus, UserId });
-
+            
             // midtrans code
+            // let snap = new midtransClient.Snap({
+            //     // Set to true if you want Production Environment (accept real transaction).
+            //     isProduction: false,
+            //     serverKey: process.env.MIDTRANS_SERVER_KEY
+            // });
+
+            // const userId = new Date().getTime();
+
+            // let parameter = {
+            //     "transaction_details": {
+            //         "order_id": 'OS-' + userId,
+            //         "gross_amount": (req.body.price * req.body.quantity)
+            //     }
+            // };
+
+            // snap.createTransaction(parameter)
+            //     .then(async(order) => {
+            //         // Order token
+            //         let orderToken = order.token;
+            //         await Order.create({
+            //             orderId: 'OS-' + userId,
+            //             clientId: req.user.dataValues.id,
+            //             status: "pending",
+                        
+            //         })
+            //     })
 
             res.status(201).json(order);
         } catch (error) {
