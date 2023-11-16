@@ -3,57 +3,75 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { CartContext } from "../context";
-import { button } from "@material-tailwind/react";
 import Swal from "sweetalert2";
+import { Select, Option } from "@material-tailwind/react";
+import { useParams } from "react-router-dom";
 
 export function Example({ open, openCloseModal }) {
   const [order, setOrder] = useState({});
   const { cart, setCart } = useContext(CartContext);
-  const [value, setValue] = useState([]);
-
+  const [province, setProvince] = useState([]);
+  const [city, setCity] = useState([]);
+  const { id } = useParams();
+  const [cost, setCost] = useState({});
+  console.log(city);
   useEffect(() => {
-    async function fetchItem() {
+    async function fetchProvince() {
       try {
-        const { data } = await axios.get("http://localhost:3000/items", {
+        const { data } = await axios.get("http://localhost:3000/provinces", {
           headers: { Authorization: `Bearer ${localStorage.access_token}` },
         });
 
-        setValue(data)
+        setProvince(data);
       } catch (error) {
         console.log(error);
       }
     }
-  });
 
-  async function deleteOrder(deletedId) {
+    fetchProvince();
+  }, []);
+console.log(cost);
+  async function fetchCityByProv(id) {
     try {
-      await axios.delete(`http://localhost:3000/orders/${deletedId}`, {
-        headers: { Authorization: `Bearer ${localStorage.access_token}` },
-      });
-
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to remove this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-            title: "Removed!",
-            text: "Your file has been removed.",
-            icon: "success",
-          });
+      const { data } = await axios.post(
+        "http://localhost:3000/cities",
+        { province: id },
+        {
+          headers: { Authorization: `Bearer ${localStorage.access_token}` },
         }
-      });
+      );
 
-      setValue(value.filter((el) => el.id !== deletedId));
+      setCity(data);
     } catch (error) {
       console.log(error);
     }
   }
+
+  async function fetchCost() {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:3000/cost",
+        {
+          destination: city.CityId,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.access_token}` },
+        }
+      );
+
+      console.log(data, 'testestes');
+
+      setCost(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCost();
+  }, [city])
+
+  
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -107,70 +125,139 @@ export function Example({ open, openCloseModal }) {
 
                       <div className="mt-8">
                         <div className="flow-root">
-                          <ul
-                            role="list"
-                            className="-my-6 divide-y divide-gray-200"
-                          >
-                            <li className="flex py-6">
-                              <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                <img
-                                  src={cart.imgUrl}
-                                  alt="image"
-                                  className="h-full w-full object-cover object-center"
-                                />
-                              </div>
+                          <form action="">
+                            <ul
+                              role="list"
+                              className="-my-6 divide-y divide-gray-200"
+                            >
+                              <li className="flex py-6">
+                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                  <img
+                                    src={cart.imgUrl}
+                                    alt="image"
+                                    className="h-full w-full object-cover object-center"
+                                  />
+                                </div>
 
-                              <div className="ml-4 flex flex-1 flex-col">
-                                <div>
-                                  <div className="flex justify-between text-base font-medium text-gray-900">
-                                    <h3>
-                                      <p>{cart.name}</p>
-                                    </h3>
-                                    <p className="ml-4">
-                                      {cart?.price?.toLocaleString("id-ID")}
+                                <div className="ml-4 flex flex-1 flex-col">
+                                  <div>
+                                    <div className="flex justify-between text-base font-medium text-gray-900">
+                                      <h3>
+                                        <p>{cart.name}</p>
+                                      </h3>
+                                      <p className="ml-4">
+                                        {cart?.price?.toLocaleString("id-ID")}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-1 items-end justify-between text-sm">
+                                    <p className="text-gray-500">
+                                      Qty {cart.quantity}
                                     </p>
+                                    <div
+                                      className="flex"
+                                      style={{ marginLeft: "120px" }}
+                                    >
+                                      <button
+                                        onClick={() => {
+                                          setCart({
+                                            ...cart,
+                                            quantity: cart.quantity
+                                              ? cart.quantity + 1
+                                              : 1,
+                                          });
+                                        }}
+                                        type="button"
+                                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                                      >
+                                        Add
+                                      </button>
+                                    </div>
+                                    <div className="flex">
+                                      <button className="font-medium text-pink-600 hover:text-pink-500">
+                                        Remove
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="flex flex-1 items-end justify-between text-sm">
-                                  <p className="text-gray-500">
-                                    Qty {cart.quantity}
-                                  </p>
-                                  <div
-                                    className="flex"
-                                    style={{ marginLeft: "120px" }}
+                              </li>
+                              <div>
+                                <div className="sm:col-span-3">
+                                  <label
+                                    htmlFor="country"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
                                   >
-                                    <button
-                                      onClick={() => {
-                                        setCart({
-                                          ...cart,
-                                          quantity: cart.quantity
-                                            ? cart.quantity + 1
-                                            : 1,
-                                        });
+                                    Province
+                                  </label>
+                                  <div className="mt-2">
+                                    <Select
+                                      size="md"
+                                      label="Select Version"
+                                      onChange={(id) => {
+                                        fetchCityByProv(id);
                                       }}
-                                      type="button"
-                                      className="font-medium text-indigo-600 hover:text-indigo-500"
                                     >
-                                      Add
-                                    </button>
+                                      {province?.map((el, idx) => {
+                                        return (
+                                          <Option key={idx} value={el.ProvinceId}>
+                                            {el.province}
+                                          </Option>
+                                        );
+                                      })}
+                                    </Select>
                                   </div>
-                                  <div className="flex">
-                                    <button
-                                      onClick={() => deleteOrder(value.id)}
-                                      className="font-medium text-pink-600 hover:text-pink-500"
-                                    >
-                                      Remove
-                                    </button>
+                                </div>
+                                <div className="sm:col-span-3">
+                                  <label
+                                    htmlFor="country"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                  >
+                                    City
+                                  </label>
+                                  <div className="mt-2">
+                                    <Select size="md" label="Select Version">
+                                      {city?.map((el, idx) => {
+                                        // console.log(el);
+                                        return (
+                                          <Option key={idx} value={el.CityId}>
+                                            {el.type} {el.city}
+                                          </Option>
+                                        );
+                                      })}
+                                    </Select>
+                                  </div>
+                                </div>
+                                <div className="sm:col-span-3">
+                                  <label
+                                    htmlFor="country"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                  >
+                                    Street Address
+                                  </label>
+                                  <div className="mt-2">
+                                    <input
+                                      type="text"
+                                      name="street-address"
+                                      id="street-address"
+                                      autoComplete="street-address"
+                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    />
                                   </div>
                                 </div>
                               </div>
-                            </li>
-                          </ul>
+                            </ul>
+                          </form>
                         </div>
                       </div>
                     </div>
 
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                      <div className="flex justify-between text-base font-medium text-gray-900">
+                        <p>Shipping Fee</p>
+                        <p>
+                          {cost ? cost.value : 'Please input product'}
+                        </p>
+                      </div>
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
                         <p>

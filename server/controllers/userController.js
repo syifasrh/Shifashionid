@@ -1,6 +1,7 @@
 const { User } = require('../models');
 const { comparePass } = require('../helpers/bcrypt');
-const { createToken } = require('../helpers/jwt');
+const { createToken, verifyToken } = require('../helpers/jwt');
+const {OAuth2Client, JWT} = require('google-auth-library');
 
 class UserController {
     static async register(req, res, next) {
@@ -35,6 +36,42 @@ class UserController {
             } else {
                 next(error);
             }
+        }
+    };
+
+    static async googleAuth(req, res) {
+        // The code would be in req.body.code
+        // Here you would handle the code exchange for an access token and refresh token
+        // Then use the tokens to get user info and create a user session
+        // Finally, send back a session token or JWT to the frontend
+        try {
+            // console.log(req.body);
+            console.log('aaaa');
+            const { code } = req.body
+
+            const client = new OAuth2Client();
+
+            const ticket = await client.verifyIdToken({
+                idToken: code,
+                audience: process.env.GOOGLE_CLIENT_ID,
+                // Specify the CLIENT_ID of the app that accesses the backend
+                // Or, if multiple clients access the backend:
+                //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+            });
+            // const payload = ticket.getPayload()
+            const { email, sub, password, providerId } = ticket.getPayload();
+
+            // const userid = payload['sub'];
+            // console.log(ticket);
+            const user = await User.findOrCreate({ where: { email, username: sub, password: sub } });
+            const createdToken = createToken({ id: user[0].id })
+
+            // If request specified a G Suite domain:
+            //   const domain = payload['hd'];
+
+            res.status(200).json(createdToken);
+        } catch (error) {
+            console.log(error.message);
         }
     };
 };

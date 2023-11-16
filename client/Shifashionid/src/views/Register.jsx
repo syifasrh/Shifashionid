@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { GoogleButton } from "./Google";
 
 export function Register() {
   const navigate = useNavigate();
@@ -101,18 +102,8 @@ export function Register() {
             </button>
           </form>
           <div className="flex justify-center mt-5">
-            <button
-              className="flex select-none items-center gap-3 rounded-lg border border-blue-gray-500 py-3 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-blue-gray-500 transition-all hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-              type="button"
-              data-ripple-dark="true"
-            >
-              <img
-                src="https://docs.material-tailwind.com/icons/google.svg"
-                alt="metamask"
-                className="h-6 w-6"
-              />
-              Continue with Google
-            </button>
+           {/* google */}
+           <GoogleButton />
           </div>
           <p className="mt-4 block text-center font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
             Already have an account?
