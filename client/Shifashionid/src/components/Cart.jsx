@@ -1,55 +1,78 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-
-const products = [
-  {
-    id: 1,
-    name: "Throwback Hip Bag",
-    href: "#",
-    color: "Salmon",
-    price: "$90.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Medium Stuff Satchel",
-    href: "#",
-    color: "Blue",
-    price: "$32.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More products...
-];
+import { CartContext } from "../context";
+import Swal from "sweetalert2";
+import { Select, Option } from "@material-tailwind/react";
+import { useParams } from "react-router-dom";
 
 export function Example({ open, openCloseModal }) {
   const [order, setOrder] = useState({});
-
+  const { cart, setCart } = useContext(CartContext);
+  const [province, setProvince] = useState([]);
+  const [city, setCity] = useState([]);
+  const { id } = useParams();
+  const [cost, setCost] = useState({});
+  console.log(city);
   useEffect(() => {
-    async function fetchOrder() {
+    async function fetchProvince() {
       try {
-        const { data } = await axios.get("http://localhost:3000/orders", {
+        const { data } = await axios.get("http://localhost:3000/provinces", {
           headers: { Authorization: `Bearer ${localStorage.access_token}` },
         });
 
-        setOrder(data);
+        setProvince(data);
       } catch (error) {
         console.log(error);
       }
-    };
+    }
 
-    fetchOrder()
+    fetchProvince();
   }, []);
+console.log(cost);
+  async function fetchCityByProv(id) {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:3000/cities",
+        { province: id },
+        {
+          headers: { Authorization: `Bearer ${localStorage.access_token}` },
+        }
+      );
+
+      setCity(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchCost() {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:3000/cost",
+        {
+          destination: city.CityId,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.access_token}` },
+        }
+      );
+
+      console.log(data, 'testestes');
+
+      setCost(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCost();
+  }, [city])
+
   
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={openCloseModal}>
@@ -88,7 +111,7 @@ export function Example({ open, openCloseModal }) {
                           <button
                             type="button"
                             className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => setOpen(false)}
+                            onClick={openCloseModal}
                           >
                             <span
                               className="absolute -inset-0.5"
@@ -102,16 +125,16 @@ export function Example({ open, openCloseModal }) {
 
                       <div className="mt-8">
                         <div className="flow-root">
-                          <ul
-                            role="list"
-                            className="-my-6 divide-y divide-gray-200"
-                          >
-                            {products.map((product) => (
-                              <li key={product.id} className="flex py-6">
+                          <form action="">
+                            <ul
+                              role="list"
+                              className="-my-6 divide-y divide-gray-200"
+                            >
+                              <li className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <img
-                                    src={product.imageSrc}
-                                    alt={product.imageAlt}
+                                    src={cart.imgUrl}
+                                    alt="image"
                                     className="h-full w-full object-cover object-center"
                                   />
                                 </div>
@@ -120,42 +143,126 @@ export function Example({ open, openCloseModal }) {
                                   <div>
                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                       <h3>
-                                        <a href={product.href}>
-                                          {product.name}
-                                        </a>
+                                        <p>{cart.name}</p>
                                       </h3>
-                                      <p className="ml-4">{product.price}</p>
+                                      <p className="ml-4">
+                                        {cart?.price?.toLocaleString("id-ID")}
+                                      </p>
                                     </div>
-                                    <p className="mt-1 text-sm text-gray-500">
-                                      {product.color}
-                                    </p>
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
                                     <p className="text-gray-500">
-                                      Qty {product.quantity}
+                                      Qty {cart.quantity}
                                     </p>
-
-                                    <div className="flex">
+                                    <div
+                                      className="flex"
+                                      style={{ marginLeft: "120px" }}
+                                    >
                                       <button
+                                        onClick={() => {
+                                          setCart({
+                                            ...cart,
+                                            quantity: cart.quantity
+                                              ? cart.quantity + 1
+                                              : 1,
+                                          });
+                                        }}
                                         type="button"
                                         className="font-medium text-indigo-600 hover:text-indigo-500"
                                       >
+                                        Add
+                                      </button>
+                                    </div>
+                                    <div className="flex">
+                                      <button className="font-medium text-pink-600 hover:text-pink-500">
                                         Remove
                                       </button>
                                     </div>
                                   </div>
                                 </div>
                               </li>
-                            ))}
-                          </ul>
+                              <div>
+                                <div className="sm:col-span-3">
+                                  <label
+                                    htmlFor="country"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                  >
+                                    Province
+                                  </label>
+                                  <div className="mt-2">
+                                    <Select
+                                      size="md"
+                                      label="Select Version"
+                                      onChange={(id) => {
+                                        fetchCityByProv(id);
+                                      }}
+                                    >
+                                      {province?.map((el, idx) => {
+                                        return (
+                                          <Option key={idx} value={el.ProvinceId}>
+                                            {el.province}
+                                          </Option>
+                                        );
+                                      })}
+                                    </Select>
+                                  </div>
+                                </div>
+                                <div className="sm:col-span-3">
+                                  <label
+                                    htmlFor="country"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                  >
+                                    City
+                                  </label>
+                                  <div className="mt-2">
+                                    <Select size="md" label="Select Version">
+                                      {city?.map((el, idx) => {
+                                        // console.log(el);
+                                        return (
+                                          <Option key={idx} value={el.CityId}>
+                                            {el.type} {el.city}
+                                          </Option>
+                                        );
+                                      })}
+                                    </Select>
+                                  </div>
+                                </div>
+                                <div className="sm:col-span-3">
+                                  <label
+                                    htmlFor="country"
+                                    className="block text-sm font-medium leading-6 text-gray-900"
+                                  >
+                                    Street Address
+                                  </label>
+                                  <div className="mt-2">
+                                    <input
+                                      type="text"
+                                      name="street-address"
+                                      id="street-address"
+                                      autoComplete="street-address"
+                                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </ul>
+                          </form>
                         </div>
                       </div>
                     </div>
 
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
+                        <p>Shipping Fee</p>
+                        <p>
+                          {cost ? cost.value : 'Please input product'}
+                        </p>
+                      </div>
+                      <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>$262.00</p>
+                        <p>
+                          {(cart.quantity * cart.price).toLocaleString("id-ID")}
+                        </p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.
@@ -174,7 +281,8 @@ export function Example({ open, openCloseModal }) {
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => setOpen(false)}
+                            onClick={openCloseModal}
+                            style={{ marginLeft: "5px" }}
                           >
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>

@@ -12,20 +12,19 @@ export function Home() {
   const navigate = useNavigate();
 
   function openCloseModal() {
-    // if(localStorage.access_token) {
-
-    if (open === true) {
-      setOpen(false);
+    if (localStorage.access_token) {
+      if (open === true) {
+        setOpen(false);
+      } else {
+        setOpen(true);
+      }
     } else {
-      setOpen(true);
+      navigate("/login");
     }
-    // } else {
-    //     navigate('/login')
-    // }
   }
 
   async function fetchItems() {
-    try {
+    try {2
       const { data } = await axios.get("http://localhost:3000/items");
 
       setItems(data);

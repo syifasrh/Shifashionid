@@ -1,16 +1,27 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { RouterProvider } from 'react-router-dom'
+import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import { RouterProvider } from "react-router-dom";
+import { CartContext } from "./context.js";
 
 import { ThemeProvider } from "@material-tailwind/react";
-import router from './router.jsx'
+import router from "./router.jsx";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+function App() {
+  const [cart, setCart] = useState({});
+  const value = { cart, setCart };
+
+  return (
+    <CartContext.Provider value={value}>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </CartContext.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  </React.StrictMode>,
-)
+    <App />
+  </React.StrictMode>
+);

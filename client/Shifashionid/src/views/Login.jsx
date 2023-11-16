@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { StickyNavbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { GoogleButton } from "./Google";
 
 export function Login() {
   const navigate = useNavigate();
@@ -25,9 +27,18 @@ export function Login() {
       );
 
       localStorage.setItem("access_token", data.access_token);
+      Swal.fire({
+        title: "Welcome!",
+        text: "Enjoy your shopping!",
+        icon: "success"
+      });
       navigate("/");
     } catch (error) {
-        console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response.data.message
+      });
     }
   };
   
@@ -84,24 +95,14 @@ export function Login() {
                 </div>
                 <button
                   className="mt-6 block w-full select-none rounded-lg bg-pink-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  type="button"
+                  type="submit"
                   data-ripple-light="true"
                 >
                   Sign In
                 </button>
                 <div className="flex justify-center mt-5">
-                  <button
-                    class="flex select-none items-center gap-3 rounded-lg border border-blue-gray-500 py-3 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-blue-gray-500 transition-all hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                    type="button"
-                    data-ripple-dark="true"
-                  >
-                    <img
-                      src="https://docs.material-tailwind.com/icons/google.svg"
-                      alt="metamask"
-                      class="h-6 w-6"
-                    />
-                    Continue with Google
-                  </button>
+                  {/* google */}
+                  <GoogleButton />
                 </div>
                 <p className="mt-4 block text-center font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
                   Don't have account yet?
