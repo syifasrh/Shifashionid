@@ -41,7 +41,7 @@ app.get('/provinces', OrderController.getProvinces)
 app.post('/cities', OrderController.getCities)
 app.post('/cost', OrderController.getCost)
 
-app.get('/payment/midtrans/token')
+app.get('/payment/midtrans/token', PaymentController.getMidtransToken)
 
 app.use(errorHandler)
 
