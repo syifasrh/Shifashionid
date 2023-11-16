@@ -21,7 +21,7 @@ export function Example({ open, openCloseModal }) {
         headers: { Authorization: `Bearer ${localStorage.access_token}` },
       });
 
-      setOrder(data)
+      setOrder(data);
     } catch (error) {
       console.log(error);
     }
@@ -59,27 +59,27 @@ export function Example({ open, openCloseModal }) {
     }
   }
 
-  async function fetchCost() {
-    try {
-      const { data } = await axios.post(
-        "http://localhost:3000/cost",
-        {
-          destination: city,
-        },
-        {
-          headers: { Authorization: `Bearer ${localStorage.access_token}` },
-        }
-      );
+  // async function fetchCost() {
+  //   try {
+  //     const { data } = await axios.post(
+  //       "http://localhost:3000/cost",
+  //       {
+  //         destination: city,
+  //       },
+  //       {
+  //         headers: { Authorization: `Bearer ${localStorage.access_token}` },
+  //       }
+  //     );
 
-      setCost(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //     setCost(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchCost();
-  }, [city]);
+  // useEffect(() => {
+  //   fetchCost();
+  // }, [city]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -265,12 +265,12 @@ export function Example({ open, openCloseModal }) {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Shipping Fee</p>
-                        <p>{cost.value}</p>
+                        <p>20.000</p>
                       </div>
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
                         <p>
-                          {(cart.quantity * cart.price).toLocaleString("id-ID")}
+                          {((cart.quantity * cart.price) + 20000).toLocaleString("id-ID")}
                         </p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">

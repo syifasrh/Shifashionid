@@ -39,6 +39,9 @@ export function StickyNavbar({ openCloseModal }) {
           <div className="flex flex-grow justify-center">
             <p>Welcome to Our Best Fashion</p>
           </div>
+          <div className="flex justify-end mr-5 p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased middle none center items-center rounded-lg uppercase text-blue-500 transition-all hover:bg-blue-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+            <Link to="/xyz">Maybe Man Like</Link>
+          </div>
           <ul className="ml-auto mr-8 hidden items-center gap-6 lg:flex">
             <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased middle none center items-center justify-center rounded-lg uppercase text-pink-500 transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
               <Link to={"/"} className="opacity-60">
