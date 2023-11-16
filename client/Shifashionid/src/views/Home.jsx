@@ -24,7 +24,7 @@ export function Home() {
   }
 
   async function fetchItems() {
-    try {2
+    try {
       const { data } = await axios.get("http://localhost:3000/items");
 
       setItems(data);
