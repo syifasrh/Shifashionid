@@ -7,7 +7,6 @@ const OrderController = require('./controllers/orderController');
 const ItemController = require('./controllers/itemController');
 const UserController = require('./controllers/userController');
 
-const PaymentController = require('./controllers/paymentController');
 
 const { authentication } = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
@@ -41,7 +40,7 @@ app.get('/provinces', OrderController.getProvinces)
 app.post('/cities', OrderController.getCities)
 app.post('/cost', OrderController.getCost)
 
-app.get('/payment/midtrans/token', PaymentController.getMidtransToken)
+app.get('/payment/midtrans/token')
 
 app.use(errorHandler)
 
