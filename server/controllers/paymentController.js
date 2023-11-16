@@ -11,9 +11,11 @@ class PaymentController {
                 serverKey: process.env.MIDTRANS_SERVER_KEY
             });
 
+            const orderId = `trx-os-${nanoid()}`;
+
             const parameter = {
                 "transaction_details": {
-                    "order_id": `trx-os-${}`,
+                    "order_id": orderId,
                     "gross_amount": 10000
                 },
                 "credit_card": {
