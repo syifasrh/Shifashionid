@@ -1,55 +1,14 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
-
-const products = [
-  {
-    id: 1,
-    name: "Throwback Hip Bag",
-    href: "#",
-    color: "Salmon",
-    price: "$90.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg",
-    imageAlt:
-      "Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.",
-  },
-  {
-    id: 2,
-    name: "Medium Stuff Satchel",
-    href: "#",
-    color: "Blue",
-    price: "$32.00",
-    quantity: 1,
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg",
-    imageAlt:
-      "Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.",
-  },
-  // More products...
-];
+import { CartContext } from "../context";
+import { button } from "@material-tailwind/react";
 
 export function Example({ open, openCloseModal }) {
   const [order, setOrder] = useState({});
+  const { cart, setCart } = useContext(CartContext);
 
-  useEffect(() => {
-    async function fetchOrder() {
-      try {
-        const { data } = await axios.get("http://localhost:3000/orders", {
-          headers: { Authorization: `Bearer ${localStorage.access_token}` },
-        });
-
-        setOrder(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchOrder()
-  }, []);
-  
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={openCloseModal}>
@@ -88,7 +47,7 @@ export function Example({ open, openCloseModal }) {
                           <button
                             type="button"
                             className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => setOpen(false)}
+                            onClick={openCloseModal}
                           >
                             <span
                               className="absolute -inset-0.5"
@@ -106,47 +65,57 @@ export function Example({ open, openCloseModal }) {
                             role="list"
                             className="-my-6 divide-y divide-gray-200"
                           >
-                            {products.map((product) => (
-                              <li key={product.id} className="flex py-6">
-                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <img
-                                    src={product.imageSrc}
-                                    alt={product.imageAlt}
-                                    className="h-full w-full object-cover object-center"
-                                  />
-                                </div>
+                            <li key={cart.id} className="flex py-6">
+                              <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                <img
+                                  src={cart.imgUrl}
+                                  alt="image"
+                                  className="h-full w-full object-cover object-center"
+                                />
+                              </div>
 
-                                <div className="ml-4 flex flex-1 flex-col">
-                                  <div>
-                                    <div className="flex justify-between text-base font-medium text-gray-900">
-                                      <h3>
-                                        <a href={product.href}>
-                                          {product.name}
-                                        </a>
-                                      </h3>
-                                      <p className="ml-4">{product.price}</p>
-                                    </div>
-                                    <p className="mt-1 text-sm text-gray-500">
-                                      {product.color}
+                              <div className="ml-4 flex flex-1 flex-col">
+                                <div>
+                                  <div className="flex justify-between text-base font-medium text-gray-900">
+                                    <h3>
+                                      <p>{cart.name}</p>
+                                    </h3>
+                                    <p className="ml-4">
+                                      {cart?.price?.toLocaleString("id-ID")}
                                     </p>
                                   </div>
-                                  <div className="flex flex-1 items-end justify-between text-sm">
-                                    <p className="text-gray-500">
-                                      Qty {product.quantity}
-                                    </p>
-
-                                    <div className="flex">
-                                      <button
-                                        type="button"
-                                        className="font-medium text-indigo-600 hover:text-indigo-500"
-                                      >
-                                        Remove
-                                      </button>
-                                    </div>
+                                </div>
+                                <div className="flex flex-1 items-end justify-between text-sm">
+                                  <p className="text-gray-500">
+                                    Qty {cart.quantity}
+                                  </p>
+                                  <div className="flex" style={{ marginLeft: "120px"}}>
+                                    <button
+                                      onClick={() => {
+                                        setCart({
+                                          ...cart,
+                                          quantity: cart.quantity
+                                            ? cart.quantity + 1
+                                            : 1
+                                        });
+                                      }}
+                                      type="button"
+                                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                                    >
+                                      Add
+                                    </button>
+                                  </div>
+                                  <div className="flex">
+                                    <button
+                                      type="button"
+                                      className="font-medium text-pink-600 hover:text-pink-500"
+                                    >
+                                      Remove
+                                    </button>
                                   </div>
                                 </div>
-                              </li>
-                            ))}
+                              </div>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -155,7 +124,7 @@ export function Example({ open, openCloseModal }) {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>$262.00</p>
+                        <p>{(cart.quantity * cart.price ).toLocaleString("id-ID")}</p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.
@@ -174,7 +143,8 @@ export function Example({ open, openCloseModal }) {
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => setOpen(false)}
+                            onClick={openCloseModal}
+                            style={{ marginLeft: "5px"}}
                           >
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>
