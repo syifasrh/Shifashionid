@@ -30,6 +30,7 @@ export function Register() {
         text: data.message,
         icon: "success"
       });
+      
       navigate("/login");
     } catch (error) {
       Swal.fire({

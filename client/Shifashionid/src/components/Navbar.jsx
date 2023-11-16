@@ -1,10 +1,30 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegUser } from "react-icons/fa6";
 import { SlHandbag } from "react-icons/sl";
+import { Fragment } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+
+const navigation = [
+  { name: 'Dashboard', href: '#', current: true },
+  { name: 'Team', href: '#', current: false },
+  { name: 'Projects', href: '#', current: false },
+  { name: 'Calendar', href: '#', current: false },
+]
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
 
 export function StickyNavbar({ openCloseModal }) {
-  const pathname = useLocation()
+  const navigate = useNavigate();
+
+  function Logout() {
+    localStorage.clear();
+
+    navigate('/')
+  }
 
   return (
     <>
@@ -14,16 +34,14 @@ export function StickyNavbar({ openCloseModal }) {
             to="/"
             className="mr-4 block cursor-pointer font-sans text-base font-medium leading-relaxed text-inherit antialiased"
           >
-            <img src="/logo.png" alt="Shifashionid" width={"100px"}/>
+            <img src="/logo.png" alt="Shifashionid" width={"100px"} />
           </Link>
           <div className="flex flex-grow justify-center">
-              <p>
-                Welcome to Our Best Fashion
-              </p>
+            <p>Welcome to Our Best Fashion</p>
           </div>
           <ul className="ml-auto mr-8 hidden items-center gap-6 lg:flex">
             <li className="block p-1 font-sans text-sm font-normal leading-normal text-inherit antialiased middle none center items-center justify-center rounded-lg uppercase text-pink-500 transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-              <Link to={'/'} className="opacity-60">
+              <Link to={"/"} className="opacity-60">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-4 w-4"
@@ -36,9 +54,10 @@ export function StickyNavbar({ openCloseModal }) {
             </li>
           </ul>
           <a
-            href="" onClick={(event) => {
-                event.preventDefault()
-                openCloseModal()
+            href=""
+            onClick={(event) => {
+              event.preventDefault();
+              openCloseModal();
             }}
             className="shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
             type="Button"
@@ -46,15 +65,52 @@ export function StickyNavbar({ openCloseModal }) {
           >
             <SlHandbag />
           </a>
-          <Link
-            to={'/login'}
-            className="ml-5 shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
-            type="button"
-            data-ripple-light="true"
-          >
-            <FaRegUser />
-          </Link>
-          
+          {!localStorage.access_token ? (
+            <Link
+              to={"/login"}
+              className="ml-5 shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:inline-block"
+              type="button"
+              data-ripple-light="true"
+            >
+              <FaRegUser />
+            </Link>
+          ) : (
+            <Menu as="div" className="relative ml-3">
+                  <div>
+                    <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">Open user menu</span>
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt=""
+                      />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            onClick={Logout}
+                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          >
+                            Sign out
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+          )}
         </div>
         <div
           className="block h-0 w-full basis-full overflow-hidden text-blue-gray-900 transition-all duration-300 ease-in lg:hidden"

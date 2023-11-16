@@ -8,13 +8,25 @@ import { Select, Option } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
 
 export function Example({ open, openCloseModal }) {
-  const [order, setOrder] = useState({});
   const { cart, setCart } = useContext(CartContext);
+  const [order, setOrder] = useState({});
   const [province, setProvince] = useState([]);
   const [city, setCity] = useState([]);
-  const { id } = useParams();
   const [cost, setCost] = useState({});
-  console.log(city);
+  const { id } = useParams();
+
+  async function addItems() {
+    try {
+      const { data } = await axios.post(`http://localhost:3000/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.access_token}` },
+      });
+
+      setOrder(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     async function fetchProvince() {
       try {
@@ -30,7 +42,7 @@ export function Example({ open, openCloseModal }) {
 
     fetchProvince();
   }, []);
-console.log(cost);
+
   async function fetchCityByProv(id) {
     try {
       const { data } = await axios.post(
@@ -52,14 +64,12 @@ console.log(cost);
       const { data } = await axios.post(
         "http://localhost:3000/cost",
         {
-          destination: city.CityId,
+          destination: city,
         },
         {
           headers: { Authorization: `Bearer ${localStorage.access_token}` },
         }
       );
-
-      console.log(data, 'testestes');
 
       setCost(data);
     } catch (error) {
@@ -69,9 +79,7 @@ console.log(cost);
 
   useEffect(() => {
     fetchCost();
-  }, [city])
-
-  
+  }, [city]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -199,7 +207,10 @@ console.log(cost);
                                     >
                                       {province?.map((el, idx) => {
                                         return (
-                                          <Option key={idx} value={el.ProvinceId}>
+                                          <Option
+                                            key={idx}
+                                            value={el.ProvinceId}
+                                          >
                                             {el.province}
                                           </Option>
                                         );
@@ -254,9 +265,7 @@ console.log(cost);
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Shipping Fee</p>
-                        <p>
-                          {cost ? cost.value : 'Please input product'}
-                        </p>
+                        <p>{cost.value}</p>
                       </div>
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
