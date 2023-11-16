@@ -1,4 +1,5 @@
 const midtransClient = require('midtrans-client');
+const { nanoid } = require('nanoid');
 
 class PaymentController {
     static async getMidtransToken(req, res, next) {
@@ -12,7 +13,7 @@ class PaymentController {
 
             const parameter = {
                 "transaction_details": {
-                    "order_id": "YOUR-ORDERID-123456",
+                    "order_id": `trx-os-${}`,
                     "gross_amount": 10000
                 },
                 "credit_card": {
