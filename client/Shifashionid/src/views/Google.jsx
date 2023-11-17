@@ -15,7 +15,7 @@ export const GoogleButton = () => {
               // console.log(credentialResponse.credential);
               // Memanggil backend dengan token ID Google
               const { data } = await axios.post(
-                "http://localhost:3000/auth/google",
+                "https://shifashionid.syifasrh.my.id/auth/google",
                 {
                   code: credentialResponse.credential, // Send code, not access token
                 }

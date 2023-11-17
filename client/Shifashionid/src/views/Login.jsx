@@ -22,7 +22,7 @@ export function Login() {
     event.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/login",
+        "https://shifashionid.syifasrh.my.id/login",
         inputFormLogin
       );
 
