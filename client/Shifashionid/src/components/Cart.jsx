@@ -14,6 +14,7 @@ export function Example({ open, openCloseModal }) {
   const [city, setCity] = useState([]);
   const [cost, setCost] = useState({});
   const { id } = useParams();
+  const [selectedCity, setSelectedCity] = useState(null)
 
   async function addItems() {
     try {
@@ -59,27 +60,27 @@ export function Example({ open, openCloseModal }) {
     }
   }
 
-  // async function fetchCost() {
-  //   try {
-  //     const { data } = await axios.post(
-  //       "http://localhost:3000/cost",
-  //       {
-  //         destination: city,
-  //       },
-  //       {
-  //         headers: { Authorization: `Bearer ${localStorage.access_token}` },
-  //       }
-  //     );
+  async function fetchCost() {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:3000/cost",
+        {
+          destination: selectedCity,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.access_token}` },
+        }
+      );
+        console.log(data);
+      setCost(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  //     setCost(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchCost();
-  // }, [city]);
+  useEffect(() => {
+    fetchCost();
+  }, [selectedCity]);
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -226,7 +227,8 @@ export function Example({ open, openCloseModal }) {
                                     City
                                   </label>
                                   <div className="mt-2">
-                                    <Select size="md" label="Select Version">
+                                    <Select size="md" label="Select Version"
+                                    onChange={(id) => setSelectedCity(id)}>
                                       {city?.map((el, idx) => {
                                         // console.log(el);
                                         return (
@@ -265,12 +267,12 @@ export function Example({ open, openCloseModal }) {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Shipping Fee</p>
-                        <p>20.000</p>
+                        <p>{cost.value}</p>
                       </div>
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
                         <p>
-                          {((cart.quantity * cart.price) + 20000).toLocaleString("id-ID")}
+                          {((cart.quantity * cart.price) + cost.value).toLocaleString("id-ID")}
                         </p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
