@@ -277,15 +277,12 @@ export function Example({ open, openCloseModal }) {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Shipping Fee</p>
-                        <p>{cost.value.toLocaleString("id-ID")}</p>
+                        <p>{cost?.value?.toLocaleString("id-ID")}</p>
                       </div>
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
                         <p>
-                          {(
-                            cart.quantity * cart.price +
-                            cost.value
-                          ).toLocaleString("id-ID")}
+                          {((cart.quantity * cart.price) + cost.value).toLocaleString("id-ID")}
                         </p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
