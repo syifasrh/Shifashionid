@@ -6,6 +6,7 @@ import { CartContext } from "../context";
 import Swal from "sweetalert2";
 import { Select, Option } from "@material-tailwind/react";
 import { useParams } from "react-router-dom";
+import { ButtonMidtrans } from "./ButtonMidtrans";
 
 export function Example({ open, openCloseModal }) {
   const { cart, setCart } = useContext(CartContext);
@@ -14,13 +15,16 @@ export function Example({ open, openCloseModal }) {
   const [city, setCity] = useState([]);
   const [cost, setCost] = useState({});
   const { id } = useParams();
-  const [selectedCity, setSelectedCity] = useState(null)
+  const [selectedCity, setSelectedCity] = useState(null);
 
   async function addItems() {
     try {
-      const { data } = await axios.post(`https://shifashionid.syifasrh.my.id/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.access_token}` },
-      });
+      const { data } = await axios.post(
+        `https://shifashionid.syifasrh.my.id/${id}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.access_token}` },
+        }
+      );
 
       setOrder(data);
     } catch (error) {
@@ -31,9 +35,12 @@ export function Example({ open, openCloseModal }) {
   useEffect(() => {
     async function fetchProvince() {
       try {
-        const { data } = await axios.get("https://shifashionid.syifasrh.my.id/provinces", {
-          headers: { Authorization: `Bearer ${localStorage.access_token}` },
-        });
+        const { data } = await axios.get(
+          "https://shifashionid.syifasrh.my.id/provinces",
+          {
+            headers: { Authorization: `Bearer ${localStorage.access_token}` },
+          }
+        );
 
         setProvince(data);
       } catch (error) {
@@ -71,7 +78,7 @@ export function Example({ open, openCloseModal }) {
           headers: { Authorization: `Bearer ${localStorage.access_token}` },
         }
       );
-        console.log(data);
+
       setCost(data);
     } catch (error) {
       console.log(error);
@@ -227,8 +234,11 @@ export function Example({ open, openCloseModal }) {
                                     City
                                   </label>
                                   <div className="mt-2">
-                                    <Select size="md" label="Select Version"
-                                    onChange={(id) => setSelectedCity(id)}>
+                                    <Select
+                                      size="md"
+                                      label="Select Version"
+                                      onChange={(id) => setSelectedCity(id)}
+                                    >
                                       {city?.map((el, idx) => {
                                         // console.log(el);
                                         return (
@@ -267,24 +277,24 @@ export function Example({ open, openCloseModal }) {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Shipping Fee</p>
-                        <p>{cost.value}</p>
+                        <p>{cost.value.toLocaleString("id-ID")}</p>
                       </div>
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
                         <p>
-                          {((cart.quantity * cart.price) + cost.value).toLocaleString("id-ID")}
+                          {(
+                            cart.quantity * cart.price +
+                            cost.value
+                          ).toLocaleString("id-ID")}
                         </p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
-                        <a
-                          href="#"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-pink-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-pink-600"
-                        >
-                          Checkout
-                        </a>
+                        {/* button */}
+                        <ButtonMidtrans totalPayment={(cart.quantity * cart.price) +
+                            cost.value}/>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>
