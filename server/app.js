@@ -12,6 +12,7 @@ const { authentication } = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 
 const cors = require('cors');
+const PaymentController = require('./controllers/paymentController');
 
 // middleware body-parser
 app.use(cors())
@@ -40,7 +41,8 @@ app.get('/provinces', OrderController.getProvinces)
 app.post('/cities', OrderController.getCities)
 app.post('/cost', OrderController.getCost)
 
-app.get('/payment/midtrans/token')
+// midtrans
+app.post('/payment/midtrans/token', PaymentController.getMidtransToken)
 
 app.use(errorHandler)
 
