@@ -23,7 +23,7 @@ export function Register() {
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:3000/add-user', inputForm);
+      const { data } = await axios.post('https://shifashionid.syifasrh.my.id/add-user', inputForm);
 
       Swal.fire({
         title: "Success!",

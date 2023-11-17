@@ -18,7 +18,7 @@ export function Example({ open, openCloseModal }) {
 
   async function addItems() {
     try {
-      const { data } = await axios.post(`http://localhost:3000/${id}`, {
+      const { data } = await axios.post(`https://shifashionid.syifasrh.my.id/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.access_token}` },
       });
 
@@ -31,7 +31,7 @@ export function Example({ open, openCloseModal }) {
   useEffect(() => {
     async function fetchProvince() {
       try {
-        const { data } = await axios.get("http://localhost:3000/provinces", {
+        const { data } = await axios.get("https://shifashionid.syifasrh.my.id/provinces", {
           headers: { Authorization: `Bearer ${localStorage.access_token}` },
         });
 
@@ -47,7 +47,7 @@ export function Example({ open, openCloseModal }) {
   async function fetchCityByProv(id) {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/cities",
+        "https://shifashionid.syifasrh.my.id/cities",
         { province: id },
         {
           headers: { Authorization: `Bearer ${localStorage.access_token}` },
@@ -63,7 +63,7 @@ export function Example({ open, openCloseModal }) {
   async function fetchCost() {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/cost",
+        "https://shifashionid.syifasrh.my.id/cost",
         {
           destination: selectedCity,
         },

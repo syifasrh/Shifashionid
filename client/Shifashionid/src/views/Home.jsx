@@ -25,7 +25,7 @@ export function Home() {
 
   async function fetchItems() {
     try {
-      const { data } = await axios.get("http://localhost:3000/items");
+      const { data } = await axios.get("https://shifashionid.syifasrh.my.id/items");
 
       setItems(data);
     } catch (error) {

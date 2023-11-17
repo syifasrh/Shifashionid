@@ -11,7 +11,7 @@ export function Detail() {
   useEffect(() => {
     async function getDetail() {
       try {
-        const { data } = await axios.get(`http://localhost:3000/items/${id}`, {
+        const { data } = await axios.get(`https://shifashionid.syifasrh.my.id/items/${id}`, {
           headers: { Authorization: `Bearer ${localStorage.access_token}` },
         });
 
