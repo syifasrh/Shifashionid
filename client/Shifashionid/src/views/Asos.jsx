@@ -12,8 +12,8 @@ export function Products() {
       url: "https://asos-com1.p.rapidapi.com/products/search-by-category",
       params: { cid: "50539" },
       headers: {
-        "X-RapidAPI-Key": "55c3d1a7cbmshb3850a7df406de3p1b5b3ejsn578cff1aad7e",
-        "X-RapidAPI-Host": "asos-com1.p.rapidapi.com",
+        "X-RapidAPI-Key": import.meta.env.VITE_RAPID_KEY,
+        "X-RapidAPI-Host": import.meta.env.VITE_RAPID_HOST,
       },
     };
     const asyncFn = async () => {
