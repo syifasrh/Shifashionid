@@ -32,7 +32,7 @@ app.post('/auth/google', UserController.googleAuth)
 app.use(authentication)
 
 // orders
-app.post('/orders/:id', OrderController.addOrder)
+app.post('/orders', OrderController.addOrder)
 app.put('/orders/:id', OrderController.updateOrder)
 app.delete('/orders/:id', OrderController.deleteOrder)
 
