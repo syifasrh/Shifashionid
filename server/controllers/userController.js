@@ -29,7 +29,7 @@ class UserController {
 
             res
                 .status(201)
-                .json({ message: `${user.username} with email ${user.email} has been created` });
+                .json({ message: `Email ${user.email} has been created` });
         } catch (error) {
             next(error);
         }

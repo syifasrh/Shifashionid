@@ -5,6 +5,8 @@ function errorHandler(err, req, res, next) {
         case "SequelizeValidationError":
         case "SequelizeUniqueConstraintError":
             return res.status(400).json({ message: err.errors[0].message });
+        case "Unauthenticated":
+            return res.status(401).json({ message: "Email/Password Invalid" });
         case "Unauthorized":
             return res.status(401).json({ message: err.message });
         case "notFound":

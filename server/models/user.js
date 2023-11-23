@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Password is required!"
         },
         isMinLength(value) {
-          if (value.lenght < 5) throw new Error("Minimum passowrd length is 5")
+          if (value.lenght < 5) throw new Error("Minimum password length is 5")
         }
       }
     }
